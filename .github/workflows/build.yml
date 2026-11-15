@@ -1,0 +1,29 @@
+
+name: Build NeoTweaks IPA
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Extract source ZIP
+        run: |
+          unzip NeoTweaks-source-build100.zip -d source
+
+      - name: Build IPA
+        working-directory: source/WQFiles-main
+        run: |
+          chmod +x build.sh
+          WQFILES_FINAL_IPA=NeoTweaks-build100.ipa bash build.sh
+
+      - name: Upload IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: NeoTweaks-build100
+          path: source/WQFiles-main/NeoTweaks-build100.ipa
